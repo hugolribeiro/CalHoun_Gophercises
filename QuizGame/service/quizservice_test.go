@@ -15,7 +15,7 @@ func Test_GetQuestionsAndResult(t *testing.T) {
 
 	defer fileInput.Close()
 
-	questionsAndResult, err := GetQuestionsAndResult(fileInput)
+	questionsAndResult, err := GetQuestionsAndResult(fileInput, false)
 	expectedQuestionsAndResult := []entities.QuestionAndResult{
 		{
 			Question: "5+5",
@@ -34,7 +34,7 @@ func Test_GetQuestionsAndResult(t *testing.T) {
 func Test_GetQuestionsAndResult_Error_Reader(t *testing.T) {
 	var fileInput *os.File
 
-	questionsAndResult, err := GetQuestionsAndResult(fileInput)
+	questionsAndResult, err := GetQuestionsAndResult(fileInput, false)
 	expectedQuestionsAndResult := []entities.QuestionAndResult{}
 
 	assert.Equal(t, expectedQuestionsAndResult, questionsAndResult)
