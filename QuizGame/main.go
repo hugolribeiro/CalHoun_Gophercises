@@ -10,15 +10,16 @@ import (
 )
 
 func main() {
+	filePath := flag.String("path", "file/problems.csv", "a csv file path in the format of queston,answer")
+	programDuration := flag.Int("duration", 30, "program duration in seconds")
+	shuffleQuestions := flag.Bool("shuffle", false, "shuffle questions")
+	flag.Parse()
+
 	if !promptToStart() {
 		os.Exit(0)
 	}
 
 	var score = 0
-
-	filePath := flag.String("path", "file/problems.csv", "a csv file path in the format of queston,answer")
-	programDuration := flag.Int("duration", 5, "program duration in seconds")
-	flag.Parse()
 
 	file, err := os.Open(*filePath)
 	if err != nil {
@@ -27,7 +28,7 @@ func main() {
 	}
 	defer file.Close()
 
-	questionsAndResults, err := service.GetQuestionsAndResult(file)
+	questionsAndResults, err := service.GetQuestionsAndResult(file, *shuffleQuestions)
 	if err != nil {
 		fmt.Printf("Error getting questions and results, %s", err)
 		os.Exit(1)

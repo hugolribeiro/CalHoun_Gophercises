@@ -3,11 +3,13 @@ package service
 import (
 	"encoding/csv"
 	"fmt"
+	"math/rand"
 	"os"
 	"quizgame/entities"
+	"time"
 )
 
-func GetQuestionsAndResult(csvFile *os.File) ([]entities.QuestionAndResult, error) {
+func GetQuestionsAndResult(csvFile *os.File, shuffleQuestions bool) ([]entities.QuestionAndResult, error) {
 	reader := csv.NewReader(csvFile)
 
 	records, err := reader.ReadAll()
@@ -24,6 +26,12 @@ func GetQuestionsAndResult(csvFile *os.File) ([]entities.QuestionAndResult, erro
 			Result:   row[1],
 		}
 		allQuestionsAndResults = append(allQuestionsAndResults, actualQuestion)
+	}
+
+	if shuffleQuestions {
+		rand.New(rand.NewSource(time.Now().UnixNano())).Shuffle(len(allQuestionsAndResults), func(i, j int) {
+			allQuestionsAndResults[i], allQuestionsAndResults[j] = allQuestionsAndResults[j], allQuestionsAndResults[i]
+		})
 	}
 
 	return allQuestionsAndResults, nil
